@@ -23,6 +23,12 @@ function getListLinks() {
         if(index < letters.length) {
             link.setAttribute('keyboard-nav-letter', letters[index].toUpperCase());
             link.classList.add('keyboard-nav-letter');
+
+            // Ajout de description Aria pour l'accessibilité
+            link.setAttribute('aria-label', link.textContent);
+            link.setAttribute('aria-description', 'Appuyer sur la touche "' + letters[index] + '" de votre clavier pour accéder au lien "' + link.textContent + '"');
+
+            link.setAttribute('aria-braillelabel', link.textContent+' (version braille)');
         }
     });
 
