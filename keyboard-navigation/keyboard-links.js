@@ -42,7 +42,7 @@ function addCss(link) {
             'display: inline-block;' +
         '}' +
         'a.keyboard-nav-letter::after {' +
-            'display: inline-block' +
+            'display: inline-block;' +
             'border-radius: 25%;' +
             'padding: 5px;' +
             'font-weight: bold;' +
