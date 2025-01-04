@@ -85,11 +85,18 @@ function keyboardUp(event) {
     }
 
     // On va sur le lien en popup (peut être bloqué par un bloqueur de pop-up)
-    var opened = window.open(targetUrl, '_blank');
+    var newWindow = window.open(targetUrl, '_blank');
 
-    // Si le retrour de l'ouverture de popup est NULL, on navigue classiquement en solution de contournement
-    if(opened === null) {
+    // Si le retour de l'ouverture de popup est NULL, on navigue classiquement en solution de contournement
+    if(newWindow === null) {
         window.location.href = targetUrl;
+
+        return;
+    }
+
+    // Si le retour est bien une Window, on force le focus dessus /!\ En fonction du paramétrage de l'utilisateur, cela peut ne pas fonctionner
+    if(newWindow.constructor.name === 'Window') {
+        newWindow.focus();
     }
 }
 
