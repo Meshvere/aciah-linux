@@ -25,6 +25,7 @@ function getListLinks() {
         // Si le lien rentre dans la liste des caractères disponibles on ajoute l'attribut personnalisé
         if(index < letters.length) {
             link.setAttribute('keyboard-nav-letter', letters[index].toUpperCase());
+            link.innerHTML += '<span class="keyboard-nav-letter-indicator">' + letters[index].toUpperCase() + '</span>';
             link.classList.add('keyboard-nav-letter');
         }
     });
@@ -41,10 +42,7 @@ function addCss(link) {
 
     // Styles à appliquer
     styleTag.innerHTML =
-        'a.keyboard-nav-letter {' +
-            'display: inline-block;' +
-        '}' +
-        'a.keyboard-nav-letter::after {' +
+        'keyboard-nav-letter-indicator {' +
             'display: inline-block;' +
             'border-radius: 25%;' +
             'padding: 5px;' +
