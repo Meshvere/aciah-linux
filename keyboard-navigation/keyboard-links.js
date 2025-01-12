@@ -21,15 +21,18 @@ function getListLinks() {
     linkList.forEach((link, index) => {
         // Si le lien rentre dans la liste des caractères disponibles on ajoute l'attribut personnalisé
         if(index < letters.length) {
+            // Ajout de description Aria pour l'accessibilité
+            link.role = 'link';
+            link.ariaLabel = link.textContent;
+            link.ariaDescription = 'Appuyer sur la touche "' + letters[index] + '" de votre clavier pour accéder au lien "' + link.textContent + '"';
+            link.setAttribute('aria-braillelabel', link.textContent+' (version braille)');
+
             link.setAttribute('keyboard-nav-letter', letters[index].toUpperCase());
             link.classList.add('keyboard-nav-letter');
-
-            // Ajout de description Aria pour l'accessibilité
-            link.setAttribute('aria-label', link.textContent);
-            link.setAttribute('aria-description', 'Appuyer sur la touche "' + letters[index] + '" de votre clavier pour accéder au lien "' + link.textContent + '"');
-
-            link.setAttribute('aria-braillelabel', link.textContent+' (version braille)');
         }
+
+        // Ajout d'un ordre de parcours pour les liens (on le fait même pour les liens sans raccourcis
+        link.tabIndex = index + 1;
     });
 
     // Réagir à la pression d'une touche sur le clavier (n'importe laquelle)
