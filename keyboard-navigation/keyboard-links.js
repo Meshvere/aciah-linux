@@ -17,6 +17,9 @@ function getListLinks() {
     // Cherche l'ensemble des liens de la page
     linkList = document.querySelectorAll('a');
 
+    // On retire tous les liens sans href
+    linkList = [...linkList].filter(link => link.href != null && link.href != undefined && link.href != '');
+
     // Parcours chaque lien trouvé pour lui affecter sa lettre dans un atytribut personnalisé
     linkList.forEach((link, index) => {
         // Si le lien rentre dans la liste des caractères disponibles on ajoute l'attribut personnalisé
@@ -71,9 +74,30 @@ function keyboardUp(event) {
 
     // On récupère le lien correspondant dans notre tableau des liens
     var theLink = linkList[linkNumber];
+    // On stocke l'URL cible
+    var targetUrl = theLink.href;
 
-    // On va sur le lien
-    window.location.href = theLink.href;
+    // Si le lien est un lien interne, on y va directement et on arrête la fonction
+    if(targetUrl.replace(window.location.href, "").match("^#.*$") !== null) {
+        window.location.href = targetUrl;
+
+        return;
+    }
+
+    // On va sur le lien en popup (peut être bloqué par un bloqueur de pop-up)
+    var newWindow = window.open(targetUrl, '_blank');
+
+    // Si le retour de l'ouverture de popup est NULL, on navigue classiquement en solution de contournement
+    if(newWindow === null) {
+        window.location.href = targetUrl;
+
+        return;
+    }
+
+    // Si le retour est bien une Window, on force le focus dessus /!\ En fonction du paramétrage de l'utilisateur, cela peut ne pas fonctionner
+    if(newWindow.constructor.name === 'Window') {
+        newWindow.focus();
+    }
 }
 
 // On lance, au chargement complet de la page, la gestion de correspondance lettre => lien
