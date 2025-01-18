@@ -18,7 +18,7 @@ function getListLinks() {
 
     var hasScreenReader = false;
 
-    if(queryString != '') {
+    if(queryString !== '') {
         var urlParams = new URLSearchParams(queryString);
 
         hasScreenReader = urlParams.get('screenReader') === 'true';
@@ -32,7 +32,7 @@ function getListLinks() {
         linkList = document.querySelectorAll('a');
 
         // On retire tous les liens sans href
-        linkList = [...linkList].filter(link => link.href != null && link.href != undefined && link.href != '');
+        linkList = [...linkList].filter(link => link.href !== null && link.href !== undefined && link.href !== '');
 
         // Parcours chaque lien trouvé pour lui affecter sa lettre dans un atytribut personnalisé
         linkList.forEach((link, index) => {
@@ -113,11 +113,11 @@ function addToast(hasScreenReader) {
     // Si dans l'URL on a screenReader=true, on indique que la navigation clavier Aciah n'est pas activée
     if(hasScreenReader) {
         aciaKeyboardHowTo.classList.add('inactive');
-        aciaKeyboardHowTo.innerHTML = "Présence d'un lecteur d'écran.<br/>Navigation au clavier Aciah désactivée.";
+        aciaKeyboardHowTo.innerHTML = "Présence du lecteur d'écran.<br /> Navigation au clavier Aciah désactivée.";
     } else {
         // Si dans l'URL on n'a pas screenReader=true, on indique que la navigation clavier Aciah est activée
         aciaKeyboardHowTo.classList.add('active');
-        aciaKeyboardHowTo.innerHTML = "Absence de lecteur d'écran.<br/>Navigation au clavier Aciah activée.";
+        aciaKeyboardHowTo.innerHTML = "Absence du lecteur d'écran.<br /> Navigation au clavier Aciah activée.";
     }
 
     // On ajoute la <div> à la page HTML
@@ -150,7 +150,7 @@ function keyboardUp(event) {
     }
 
     // On va sur le lien en popup (peut être bloqué par un bloqueur de pop-up)
-    var newWindow = window.open(targetUrl, '_blank');
+    var newWindow = window.open(targetUrl, 'aciah');
 
     // Si le retour de l'ouverture de popup est NULL, on navigue classiquement en solution de contournement
     if(newWindow === null) {

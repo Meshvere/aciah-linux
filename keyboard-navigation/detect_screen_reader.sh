@@ -9,6 +9,6 @@ if [ `pgrep orca` ]
 	else
 		uri=$uri"false"
 fi
-echo $uri
-firefox "$uri"
+
+firefox -private "$uri"
 
