@@ -1,7 +1,7 @@
 import json
 import sys
 
-# Usage python script.py /home/aciah/.local/share/orca/user-settings.conf aciah.dic.json
+# Usage python3 script.py /home/aciah/.local/share/orca/user-settings.conf aciah.dic.json
 
 def main():
     # Vérifier si un fichier a été passé en argument
