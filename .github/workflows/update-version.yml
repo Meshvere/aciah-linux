@@ -12,6 +12,12 @@ jobs:
             -   name: Checkout code
                 uses: actions/checkout@v3
 
+            -   name: Pull the code
+                run: |
+                    git config user.name "github-actions[bot]"
+                    git config user.email "github-actions[bot]@users.noreply.github.com"
+                    git pull origin HEAD:refs/heads/main
+
             -   name: Get the tag
                 run: |
                     echo "${GITHUB_REF#refs/tags/}"
