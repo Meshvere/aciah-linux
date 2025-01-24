@@ -12,22 +12,15 @@ jobs:
             -   name: Checkout code
                 uses: actions/checkout@v3
 
-            -   name: Debug git state
+            -   name: Find branch containing the tag
+                id: find_branch
                 run: |
-                    git branch -a
-                    git status
-
-            #            -   name: Pull the code
-            #                run: |
-            #                    git config user.name "github-actions[bot]"
-            #                    git config user.email "github-actions[bot]@users.noreply.github.com"
-            #                    git config pull.rebase true
-            #                    BRANCH=$(echo $GITHUB_REF | sed 's/refs\/heads\///')
-            #                    git pull origin HEAD:refs/heads/$BRANCH
+                    TAG=$(echo "${GITHUB_REF#refs/tags/}")
+                    BRANCH=$(git branch --all --contains $TAG | grep -v 'remotes/origin/HEAD' | grep 'remotes/origin/' | head -n 1 | sed 's/remotes\/origin\///')
+                    echo "branch=$BRANCH" >> $GITHUB_ENV
 
             -   name: Get the tag
                 run: |
-                    echo "${GITHUB_REF#refs/tags/}"
                     echo "${GITHUB_REF#refs/tags/}" > version.txt
 
             -   name: Commit and push the updated version file
@@ -36,5 +29,4 @@ jobs:
                     git config user.email "github-actions[bot]@users.noreply.github.com"
                     git add version.txt
                     git commit -m "Update version.txt to ${GITHUB_REF#refs/tags/}"
-                    BRANCH=$(echo $GITHUB_REF | sed 's/refs\/heads\///')
-                    git push origin HEAD:refs/heads/$BRANCH
+                    git push origin HEAD:refs/heads/${{ env.branch }}
