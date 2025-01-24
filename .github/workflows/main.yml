@@ -1,0 +1,24 @@
+name: Update version file
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Get the tag
+        run: echo "${GITHUB_REF#refs/tags/}" > version.txt
+
+      - name: Commit and push the updated version file
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add version.txt
+          git commit -m "Update version.txt to ${GITHUB_REF#refs/tags/}"
+          git push origin HEAD
