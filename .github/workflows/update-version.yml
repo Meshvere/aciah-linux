@@ -17,12 +17,7 @@ jobs:
                 run: |
                     TAG=$(echo "${GITHUB_REF#refs/tags/}")
                     COMMIT=$(git rev-parse $TAG)
-                    BRANCH=$(git for-each-ref --format='%(refname:short)' refs/heads/ | while read branch; do
-                        if git merge-base --is-ancestor $COMMIT refs/heads/$branch; then
-                            echo $branch
-                            break
-                        fi
-                    done)
+                    BRANCH=$(git rev-parse --abbrev-ref HEAD)
                     if [ -z "$BRANCH" ]; then
                         echo "No branch found for tag $TAG"
                         exit 1
