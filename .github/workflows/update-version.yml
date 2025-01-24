@@ -17,7 +17,8 @@ jobs:
                     git config user.name "github-actions[bot]"
                     git config user.email "github-actions[bot]@users.noreply.github.com"
                     git config pull.rebase true
-                    git pull origin HEAD:refs/heads/main
+                    BRANCH=$(echo $GITHUB_REF | sed 's/refs\/heads\///')
+                    git pull origin HEAD:refs/heads/$BRANCH
 
             -   name: Get the tag
                 run: |
@@ -30,4 +31,5 @@ jobs:
                     git config user.email "github-actions[bot]@users.noreply.github.com"
                     git add version.txt
                     git commit -m "Update version.txt to ${GITHUB_REF#refs/tags/}"
-                    git push origin HEAD:refs/heads/main
+                    BRANCH=$(echo $GITHUB_REF | sed 's/refs\/heads\///')
+                    git pull origin HEAD:refs/heads/$BRANCH
