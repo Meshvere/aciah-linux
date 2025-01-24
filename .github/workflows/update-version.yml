@@ -12,6 +12,11 @@ jobs:
             -   name: Checkout code
                 uses: actions/checkout@v3
 
+            -   name: Debug git state
+                run: |
+                    git branch -a
+                    git status
+
             #            -   name: Pull the code
             #                run: |
             #                    git config user.name "github-actions[bot]"
