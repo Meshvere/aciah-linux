@@ -1,0 +1,69 @@
+name: Update version file
+
+on:
+    push:
+        tags:
+            - "*"
+
+jobs:
+    update-version:
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v3
+                with:
+                    fetch-depth: 0
+
+            -   name: Find branch containing the tag
+                id: find_branch
+                run: |
+                    git config user.name "github-actions[bot]"
+                    git config user.email "github-actions[bot]@users.noreply.github.com"
+                    
+                    TAG=$(echo "${GITHUB_REF#refs/tags/}")
+                    echo "tag => "$TAG
+                    
+                    if [ -e "version.txt" ] && [ "$TAG" == "$(cat "version.txt")" ]; then
+                        echo "Fichier déjà mis à jour"
+                    
+                        return 0
+                    fi
+                    
+                    TAG_COMMIT=$(git rev-parse "$GITHUB_SHA")
+                    RAW_BRANCH=$(git branch -r --contains "$TAG_COMMIT" | grep -v '\->' | head -n 1 | awk '{print $1}')
+                    BRANCH=$(echo "$RAW_BRANCH" | sed 's|^origin/||')
+                    
+                    echo "RAW branch => "$RAW_BRANCH
+                    echo "branch => "$BRANCH
+                    
+                    if [ -z "$BRANCH" ] || [ "$BRANCH" == "HEAD" ]; then
+                        echo "No branch found for tag $TAG"
+                        exit 404
+                    fi
+                    
+                    echo "tag=$TAG" >> $GITHUB_ENV
+                    echo "rawBranch=$RAW_BRANCH" >> $GITHUB_ENV
+                    echo "branch=$BRANCH" >> $GITHUB_ENV
+
+            -   name: Commit and push the updated version file
+                run: |
+                    git config user.name "github-actions[bot]" &> /dev/null
+                    git config user.email "github-actions[bot]@users.noreply.github.com" &> /dev/null
+                    
+                    git fetch --all &> /dev/null
+                    
+                    git checkout ${{ env.branch }} &> /dev/null
+                    git pull --rebase &> /dev/null
+                    
+                    echo "${{ env.tag }}" > version.txt
+                    git add version.txt
+                    
+                    git commit -m "Update version.txt to ${{ env.tag }}"
+                    
+                    git push origin ${{ env.branch }} --force
+                    
+                    git tag -d ${{ env.tag }}
+                    git push --delete origin ${{ env.tag }}
+                    
+                    git tag ${{ env.tag }}
+                    git push origin ${{ env.tag }}
