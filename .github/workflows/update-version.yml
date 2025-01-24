@@ -12,13 +12,13 @@ jobs:
             -   name: Checkout code
                 uses: actions/checkout@v3
 
-            -   name: Pull the code
-                run: |
-                    git config user.name "github-actions[bot]"
-                    git config user.email "github-actions[bot]@users.noreply.github.com"
-                    git config pull.rebase true
-                    BRANCH=$(echo $GITHUB_REF | sed 's/refs\/heads\///')
-                    git pull origin HEAD:refs/heads/$BRANCH
+            #            -   name: Pull the code
+            #                run: |
+            #                    git config user.name "github-actions[bot]"
+            #                    git config user.email "github-actions[bot]@users.noreply.github.com"
+            #                    git config pull.rebase true
+            #                    BRANCH=$(echo $GITHUB_REF | sed 's/refs\/heads\///')
+            #                    git pull origin HEAD:refs/heads/$BRANCH
 
             -   name: Get the tag
                 run: |
@@ -32,4 +32,4 @@ jobs:
                     git add version.txt
                     git commit -m "Update version.txt to ${GITHUB_REF#refs/tags/}"
                     BRANCH=$(echo $GITHUB_REF | sed 's/refs\/heads\///')
-                    git pull origin HEAD:refs/heads/$BRANCH
+                    git push origin HEAD:refs/heads/$BRANCH
