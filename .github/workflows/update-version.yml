@@ -16,7 +16,9 @@ jobs:
                 id: find_branch
                 run: |
                     TAG=$(echo "${GITHUB_REF#refs/tags/}")
+                    echo "tag => "$TAG
                     BRANCH=$(git branch --all --contains $TAG | grep -v 'remotes/origin/HEAD' | grep 'remotes/origin/' | head -n 1 | sed 's/remotes\/origin\///')
+                    echo "branch => "$BRANCH
                     echo "branch=$BRANCH" >> $GITHUB_ENV
 
             -   name: Get the tag
